@@ -1,7 +1,6 @@
 import React from 'react';
 import 'rbx/index.css';
 import { Button, Container, Title } from 'rbx';
-import { useState } from 'react';
 
 const schedule = {
   "title": "CS Courses for 2018-2019",
@@ -34,9 +33,9 @@ const Banner = ({ title }) => (
 );
 
 const CourseList = ({ courses }) => (
-  <Button.Group>
+  <div>
     { courses.map(course => <Course key={course.id} course={ course } />) }
-  </Button.Group>
+  </div>
 );
 
 const terms = { F: 'Fall', W: 'Winter', S: 'Spring'};
@@ -56,10 +55,10 @@ const Course = ({ course }) => (
 );
 
 const App = () =>  (
-  <Container>
+  <div>
     <Banner title = {schedule.title}/>
     <CourseList courses={ schedule.courses } />
-  </Container>
+  </div>
 );
 
 export default App;

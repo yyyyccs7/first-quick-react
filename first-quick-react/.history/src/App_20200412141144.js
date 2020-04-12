@@ -1,7 +1,6 @@
 import React from 'react';
 import 'rbx/index.css';
 import { Button, Container, Title } from 'rbx';
-import { useState } from 'react';
 
 const schedule = {
   "title": "CS Courses for 2018-2019",
@@ -56,10 +55,10 @@ const Course = ({ course }) => (
 );
 
 const App = () =>  (
-  <Container>
+  <div>
     <Banner title = {schedule.title}/>
     <CourseList courses={ schedule.courses } />
-  </Container>
+  </div>
 );
 
 export default App;
