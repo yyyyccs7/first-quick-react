@@ -119,6 +119,9 @@ const Course = ({ course, state }) => (
   };
 
 
+
+
+
 const hasConflict = (course, selected) => (
   selected.some(selection => courseConflict(course, selection))
 );

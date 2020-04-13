@@ -15,8 +15,8 @@ const firebaseConfig = {
   storageBucket: "first-quick-react.appspot.com",
   messagingSenderId: "451507045047",
   appId: "1:451507045047:web:fc1311e5d080d2c3af4332",
-  measurementId: "G-F4H6JTV8S3"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref();
 
@@ -117,6 +117,9 @@ const Course = ({ course, state }) => (
     db.child('courses').child(course.id).update({meets})
       .catch(error => alert(error));
   };
+
+
+
 
 
 const hasConflict = (course, selected) => (

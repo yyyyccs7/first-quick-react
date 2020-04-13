@@ -113,10 +113,8 @@ const Course = ({ course, state }) => (
     else moveCourse(course);
   };
 
-  const saveCourse = (course, meets) => {
-    db.child('courses').child(course.id).update({meets})
-      .catch(error => alert(error));
-  };
+
+
 
 
 const hasConflict = (course, selected) => (

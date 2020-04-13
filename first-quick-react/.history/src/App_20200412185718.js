@@ -105,18 +105,9 @@ const Course = ({ course, state }) => (
   );
 
 
-  const moveCourse = course => {
-    const meets = prompt('Enter new meeting data, in this format:', course.meets);
-    if (!meets) return;
-    const {days} = timeParts(meets);
-    if (days) saveCourse(course, meets); 
-    else moveCourse(course);
-  };
 
-  const saveCourse = (course, meets) => {
-    db.child('courses').child(course.id).update({meets})
-      .catch(error => alert(error));
-  };
+
+
 
 
 const hasConflict = (course, selected) => (

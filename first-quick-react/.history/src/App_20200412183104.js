@@ -96,28 +96,12 @@ const getCourseNumber = course => (
 
 const Course = ({ course, state }) => (
   <Button color={ buttonColor(state.selected.includes(course)) }
-      onClick={ () => state.toggle(course) }
-      onDoubleClick={ () => moveCourse(course) }
-      disabled={ hasConflict(course, state.selected) }
-      >
-      { getCourseTerm(course) } CS { getCourseNumber(course) }: { course.title }
-    </Button>
-  );
-
-
-  const moveCourse = course => {
-    const meets = prompt('Enter new meeting data, in this format:', course.meets);
-    if (!meets) return;
-    const {days} = timeParts(meets);
-    if (days) saveCourse(course, meets); 
-    else moveCourse(course);
-  };
-
-  const saveCourse = (course, meets) => {
-    db.child('courses').child(course.id).update({meets})
-      .catch(error => alert(error));
-  };
-
+    onClick={ () => state.toggle(course) }
+    disabled={ hasConflict(course, state.selected) }
+    >
+    { getCourseTerm(course) } CS { getCourseNumber(course) }: { course.title }
+  </Button>
+);
 
 const hasConflict = (course, selected) => (
   selected.some(selection => courseConflict(course, selection))
@@ -141,6 +125,9 @@ const addScheduleTimes = schedule => ({
   courses: Object.values(schedule.courses).map(addCourseTimes)
 });
 
+db.on('value', snap => {
+  if (snap.val()) setSchedule(addScheduleTimes(snap.val()));
+}, error => alert(error));
 
 const meetsPat = /^ *((?:M|Tu|W|Th|F)+) +(\d\d?):(\d\d) *[ -] *(\d\d?):(\d\d) *$/;
 const days = ['M', 'Tu', 'W', 'Th', 'F'];
@@ -176,21 +163,24 @@ const courseConflict = (course1, course2) => (
 
 const App = () => {
   const [schedule, setSchedule] = useState({ title: '', courses: [] });
+  const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';
 
   useEffect(() => {
-    const handleData = snap => {
-      if (snap.val()) setSchedule(addScheduleTimes(snap.val()));
+    const fetchSchedule = async () => {
+      const response = await fetch(url);
+      if (!response.ok) throw response;
+      const json = await response.json();
+      setSchedule(addScheduleTimes(json));
     }
-    db.on('value', handleData, error => alert(error));
-    return () => { db.off('value', handleData); };
-  }, []);
+    fetchSchedule();
+  }, [])
 
   return (
     <Container>
       <Banner title={ schedule.title } />
       <CourseList courses={ schedule.courses } />
     </Container>
-);
+  );
 };
 
 export default App;

@@ -94,6 +94,9 @@ const getCourseNumber = course => (
   course.id.slice(1, 4)
 );
 
+
+
+
 const Course = ({ course, state }) => (
   <Button color={ buttonColor(state.selected.includes(course)) }
       onClick={ () => state.toggle(course) }
@@ -104,19 +107,6 @@ const Course = ({ course, state }) => (
     </Button>
   );
 
-
-  const moveCourse = course => {
-    const meets = prompt('Enter new meeting data, in this format:', course.meets);
-    if (!meets) return;
-    const {days} = timeParts(meets);
-    if (days) saveCourse(course, meets); 
-    else moveCourse(course);
-  };
-
-  const saveCourse = (course, meets) => {
-    db.child('courses').child(course.id).update({meets})
-      .catch(error => alert(error));
-  };
 
 
 const hasConflict = (course, selected) => (
